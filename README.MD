@@ -1,4 +1,4 @@
-# 🎲 Choose Your Story — Interactive Quiz Game
+# Choose Your Story — Interactive Quiz Game
 
 A small JavaScript exercise built as my first hands-on task with JS fundamentals, part of the Front-End course at **EraaSoft**.
 
