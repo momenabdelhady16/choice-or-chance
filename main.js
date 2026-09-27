@@ -128,7 +128,7 @@ function question() {
         let temp=quests[index];
         quests.splice(index, 1);
         let answer = confirm(
-            `${temp.quest} (ok = option 1, cancel = option 2)\n(you have ${3 - mistakes} try)`,
+            `${temp.quest}\n(ok = option 1, cancel = option 2)\n(you have ${3 - mistakes} try)`,
         );
         let rand = randOfTwo();
         answer = answer
