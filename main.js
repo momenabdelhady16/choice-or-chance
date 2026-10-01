@@ -6,7 +6,6 @@ let ins_question = document.getElementById("question");
 let counter = document.getElementById("counter");
 let res = document.getElementById("result");
 let restart = document.getElementById("restart");
-let pageBody = document.querySelector("body");
 function randOfN(max) {
     return Math.floor(Math.random() * max);
 }
@@ -142,8 +141,8 @@ let getQuestion;
 let question;
 let mistakes = 0;
 let number = 1;
-let choice;
 let rand;
+const MAX_MISTAKES = 4;
 
 res.classList.add("result--idle");
 function startGame() {
@@ -159,72 +158,44 @@ function startGame() {
         startSwitch += 1;
         ins_question.textContent = question.quest;
         question_number.textContent = `Question ${number}`;
-        counter.textContent = `You have ${4 - mistakes} Tries!`;
+        counter.textContent = `You have ${MAX_MISTAKES - mistakes} Tries!`;
     }
 }
 function finishGame() {
-    res.appendChild(document.createElement("br"));
-    res.appendChild(
-        document.createTextNode(
-            "🏆 Congrats! All done, you passed all questions 🎉",
-        ),
-    );
-    if (mistakes <= 1 ) {
-        res.appendChild(document.createElement("br"));
-        res.appendChild(
-            document.createTextNode(
-                `🥇 Incredible! You are the best. ( ${number-mistakes} / ${number} )`,
-            ),
-        );
+    let medal = "";
+    if (mistakes <= 1) {
+        medal = "🥇 Incredible! You are the best.";
     } else if (mistakes == 2) {
-        res.appendChild(document.createElement("br"));
-        res.appendChild(
-            document.createTextNode(
-                `🥈 Amazing! You got second place. ( ${number-mistakes} / ${number} )`,
-            ),
-        );
+        medal = "🥈 Amazing! You got second place.";
     } else if (mistakes == 3) {
-        res.appendChild(document.createElement("br"));
-        res.appendChild(
-            document.createTextNode(
-                `🥉 Well done! You made the top three. ( ${number-mistakes} / ${number} )`,
-            ),
-        );
+        medal = "🥉 Well done! You made the top three.";
     }
+    res.innerHTML += `<br>🏆 Congrats! All done, you passed all questions 🎉<br>${medal} ( ${number - mistakes} / ${number} )`;
     gameBox.style.display = "none";
     restart.style.display = "block";
 }
 function action(opt) {
     rand = randOfTwo();
-    if (rand == 0) {
-        res.textContent = question[opt][0];
-        question = getQuestion();
-        if (question != 0) {
-            number += 1;
-            question_number.textContent = `Question ${number}`;
-            ins_question.textContent = question.quest;
-        } else {
-            finishGame();
-        }
-    } else {
-        res.textContent = question[opt][1];
+    res.textContent = question[opt][rand];
+    if (rand == 1) {
         mistakes += 1;
-        if (mistakes >= 4) {
+        if (mistakes >= MAX_MISTAKES) {
             res.appendChild(document.createElement("br"));
             res.appendChild(document.createTextNode("☠️ You Died"));
             gameBox.style.display = "none";
             restart.style.display = "block";
-        } else {
-            counter.textContent = `You have ${4 - mistakes} Tries!`;
-            question = getQuestion();
-            if (question != 0) {
-                number += 1;
-                question_number.textContent = `Question ${number}`;
-                ins_question.textContent = question.quest;
-            } else {
-                finishGame();
-            }
+            return;
         }
+    }
+    question = getQuestion();
+    if (question != 0) {
+        number += 1;
+        question_number.textContent = `Question ${number}`;
+        ins_question.textContent = question.quest;
+        let chance = MAX_MISTAKES - mistakes;
+        counter.textContent = `You have ${chance} ${chance === 1 ? "Try !" : "Tries !"}`;
+    } else {
+        finishGame();
     }
 }
 opt_1.addEventListener("click", () => {
