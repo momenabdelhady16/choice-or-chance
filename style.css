@@ -75,6 +75,7 @@ body {
         border-radius: 50%;
         position: absolute;
         opacity: 0.12;
+        pointer-events: none;
     }
     .circle--big {
         width: 500px;
