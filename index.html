@@ -1,11 +1,40 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <script src="./main.js"></script>
-</body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <!-- FONT AWESOME CDN -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css" integrity="sha512-QeR2VH+lsBE5LSAe1Q5EnTBbe7XTBubt8dG93Y7gidSgdMCr8nVqKcfKAMyN96SV8KDbZVTDXChatu5G2KQGzg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+        <!-- LOCAL CSS LINK -->
+        <link rel="stylesheet" href="./style.css" />
+    </head>
+    <body>
+        <h1 class="result" id="result" onclick="startGame()">Click to start</h1>
+        <i id="restart" class="fa-solid restart fa-rotate-right"></i>
+        <section class="question-box" id="question-box" style="display: none;">
+            <div class="circle circle--big"></div>
+            <div class="circle circle--md"></div>
+            <div class="circle circle--small"></div>
+            <h2 class="question-box__question-number" id="question-number">
+                Lorem.
+            </h2>
+            <p class="question-box__question" id="question">
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                Quibusdam harum rem quis?
+            </p>
+            <div class="question-box__btn-box">
+                <div class="question-box__btn-inner">
+                    <button class="question-box__btn" id="option_1" value="option_1">
+                        Option 1
+                    </button>
+                    <button class="question-box__btn" id="option_2" value="option_2">
+                        Option 2
+                    </button>
+                </div>
+                <p id="counter" class="counter">You Have 3 Tries</p>
+            </div>
+        </section>
+        <script src="./main.js"></script>
+    </body>
 </html>

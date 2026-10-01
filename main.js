@@ -1,10 +1,19 @@
+let gameBox = document.getElementById("question-box");
+let opt_1 = document.getElementById("option_1");
+let opt_2 = document.getElementById("option_2");
+let question_number = document.getElementById("question-number");
+let ins_question = document.getElementById("question");
+let counter = document.getElementById("counter");
+let res = document.getElementById("result");
+let restart = document.getElementById("restart");
+let pageBody = document.querySelector("body");
 function randOfN(max) {
     return Math.floor(Math.random() * max);
 }
 function randOfTwo() {
     return Math.floor(Math.random() * 2);
 }
-function question() {
+function questions() {
     let quests = [
         {
             quest: "Do you go to the gym in the morning or the evening?",
@@ -117,34 +126,118 @@ function question() {
             ],
         },
     ];
-    let mistakes = 0;
-    return function ask() {
+    return function () {
         let questsLength = quests.length;
         if (questsLength == 0) {
-            alert("All done! you passed all questions");
             return 0;
         }
         let index = randOfN(questsLength);
-        let temp=quests[index];
+        let temp = quests[index];
         quests.splice(index, 1);
-        let answer = confirm(
-            `${temp.quest}\n(ok = option 1, cancel = option 2)\n(you have ${3 - mistakes} try)`,
-        );
-        let rand = randOfTwo();
-        answer = answer
-            ? temp.option_1
-            : temp.option_2;
-        alert(answer[rand]);
-        if (rand == 1) {
-            mistakes += 1;
-            if(mistakes >= 3) {
-                alert("You Died!");
-                return 0;
-            }
-        }
-        return ask();
+        return temp;
     };
 }
+let startSwitch = 0;
+let getQuestion;
+let question;
+let mistakes = 0;
+let number = 1;
+let choice;
+let rand;
 
-let test = question();
-test();
+res.classList.add("result--idle");
+function startGame() {
+    if (startSwitch != 0) {
+        return;
+    } else {
+        restart.style.display = "none";
+        gameBox.style.display = "flex";
+        res.textContent = "";
+        res.classList.remove("result--idle");
+        getQuestion = questions();
+        question = getQuestion();
+        startSwitch += 1;
+        ins_question.textContent = question.quest;
+        question_number.textContent = `Question ${number}`;
+        counter.textContent = `You have ${4 - mistakes} Tries!`;
+    }
+}
+function finishGame() {
+    res.appendChild(document.createElement("br"));
+    res.appendChild(
+        document.createTextNode(
+            "🏆 Congrats! All done, you passed all questions 🎉",
+        ),
+    );
+    if (mistakes <= 1 ) {
+        res.appendChild(document.createElement("br"));
+        res.appendChild(
+            document.createTextNode(
+                `🥇 Incredible! You are the best. ( ${number-mistakes} / ${number} )`,
+            ),
+        );
+    } else if (mistakes == 2) {
+        res.appendChild(document.createElement("br"));
+        res.appendChild(
+            document.createTextNode(
+                `🥈 Amazing! You got second place. ( ${number-mistakes} / ${number} )`,
+            ),
+        );
+    } else if (mistakes == 3) {
+        res.appendChild(document.createElement("br"));
+        res.appendChild(
+            document.createTextNode(
+                `🥉 Well done! You made the top three. ( ${number-mistakes} / ${number} )`,
+            ),
+        );
+    }
+    gameBox.style.display = "none";
+    restart.style.display = "block";
+}
+function action(opt) {
+    rand = randOfTwo();
+    if (rand == 0) {
+        res.textContent = question[opt][0];
+        question = getQuestion();
+        if (question != 0) {
+            number += 1;
+            question_number.textContent = `Question ${number}`;
+            ins_question.textContent = question.quest;
+        } else {
+            finishGame();
+        }
+    } else {
+        res.textContent = question[opt][1];
+        mistakes += 1;
+        if (mistakes >= 4) {
+            res.appendChild(document.createElement("br"));
+            res.appendChild(document.createTextNode("☠️ You Died"));
+            gameBox.style.display = "none";
+            restart.style.display = "block";
+        } else {
+            counter.textContent = `You have ${4 - mistakes} Tries!`;
+            question = getQuestion();
+            if (question != 0) {
+                number += 1;
+                question_number.textContent = `Question ${number}`;
+                ins_question.textContent = question.quest;
+            } else {
+                finishGame();
+            }
+        }
+    }
+}
+opt_1.addEventListener("click", () => {
+    action(opt_1.value);
+});
+opt_2.addEventListener("click", () => {
+    action(opt_2.value);
+});
+restart.addEventListener("click", () => {
+    startSwitch = 0;
+    mistakes = 0;
+    number = 1;
+    startGame();
+});
+
+// test();
